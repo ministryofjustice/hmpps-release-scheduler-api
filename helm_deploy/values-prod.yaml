@@ -10,7 +10,6 @@ generic-service:
     SENTRY_ENVIRONMENT: prod
 
 generic-prometheus-alerts:
-  alertSeverity: move-and-improve-alerts
   rdsAlertsDatabases:
     cloud-platform-3fd75c7a01b5cee5: "Release Scheduler API DB"
     rdsAlertsConnectionThreshold: 100

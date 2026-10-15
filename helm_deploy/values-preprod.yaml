@@ -10,7 +10,6 @@ generic-service:
 
 generic-prometheus-alerts:
   businessHoursOnly: true
-  alertSeverity: move-and-improve-alerts-non-prod
   rdsAlertsDatabases:
     cloud-platform-31346e935fd40db4: "Release Scheduler API DB"
     rdsAlertsConnectionThreshold: 100
