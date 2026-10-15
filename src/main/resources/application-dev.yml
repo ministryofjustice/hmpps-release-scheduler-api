@@ -7,3 +7,6 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
+
+service:
+  active-prisons: "***"
