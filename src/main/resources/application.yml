@@ -14,7 +14,7 @@ spring:
     hikari:
       connection-timeout: 5000
       validation-timeout: 500
-      maximumPoolSize: 20
+      maximumPoolSize: 25
       leak-detection-threshold: 2000
       auto-commit: false
       data-source-properties:
@@ -119,3 +119,6 @@ springdoc:
 
 service:
   active-prisons:
+  domain-events:
+    poll-interval: PT0s
+    batch-size: 10

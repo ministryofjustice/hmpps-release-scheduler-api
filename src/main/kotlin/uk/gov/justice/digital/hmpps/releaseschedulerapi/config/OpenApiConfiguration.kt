@@ -8,9 +8,20 @@ import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import io.swagger.v3.oas.models.servers.Server
+import io.swagger.v3.oas.models.tags.Tag
 import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.config.OpenApiTags.INTEGRATIONS
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.config.OpenApiTags.SYNC
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.config.OpenApiTags.UI
+import java.time.LocalTime
+
+object OpenApiTags {
+  const val INTEGRATIONS = "Integrations"
+  const val SYNC = "Sync"
+  const val UI = "UI"
+}
 
 @Configuration
 class OpenApiConfiguration(buildProperties: BuildProperties) {
@@ -27,7 +38,11 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
       ),
     )
     .tags(
-      listOf(),
+      listOf(
+        Tag().name(INTEGRATIONS).description("DPS integration endpoints"),
+        Tag().name(UI).description("UI endpoints - not to be use by any other client"),
+        Tag().name(SYNC).description("Legacy sync endpoints - not to be use by any other client"),
+      ),
     )
     .info(
       Info().title("HMPPS Release Scheduler Api").version(version)
@@ -41,7 +56,7 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
         ),
     )
     .addSecurityItem(SecurityRequirement().addList("RELEASE_SCHEDULER_UI", listOf("read", "write")))
-    .also { PrimitiveType.enablePartialTime() }
+    .also { PrimitiveType.customClasses()[LocalTime::class.java.name] = PrimitiveType.PARTIAL_TIME }
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)
