@@ -5,8 +5,8 @@ generic-service:
     host: release-scheduler-api-preprod.hmpps.service.justice.gov.uk
 
   env:
-    SPRING_PROFILES_ACTIVE: dev
-    SENTRY_ENVIRONMENT: dev
+    SPRING_PROFILES_ACTIVE: preprod
+    SENTRY_ENVIRONMENT: preprod
 
 generic-prometheus-alerts:
   businessHoursOnly: true
