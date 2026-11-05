@@ -20,6 +20,7 @@ class WebClientConfiguration(
   @Value($$"${integration.nomis-migration.url}") private val nomisMigrationBaseUri: String,
   @Value($$"${integration.prison-register.url}") private val prisonRegisterBaseUri: String,
   @Value($$"${integration.prisoner-search.url}") private val prisonerSearchBaseUri: String,
+  @Value($$"${integration.calculate-release-dates.url}") private val crdBaseUri: String,
 ) {
 
   @Bean
@@ -55,6 +56,9 @@ class WebClientConfiguration(
 
   @Bean
   fun prisonerSearchWebClient(authorizedClientManager: OAuth2AuthorizedClientManager, builder: Builder) = authorisedWebClient(prisonerSearchBaseUri, builder, authorizedClientManager)
+
+  @Bean
+  fun crdWebClient(authorizedClientManager: OAuth2AuthorizedClientManager, builder: Builder) = authorisedWebClient(crdBaseUri, builder, authorizedClientManager)
 
   companion object {
     const val DEFAULT_REGISTRATION_ID = "default"

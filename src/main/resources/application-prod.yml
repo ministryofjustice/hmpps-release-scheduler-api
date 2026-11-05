@@ -9,6 +9,8 @@ integration:
     url: "https://prison-register.hmpps.service.justice.gov.uk"
   prisoner-search:
     url: "https://prisoner-search.prison.service.justice.gov.uk"
+  calculate-release-dates:
+    url: "https://calculate-release-dates-api.hmpps.service.justice.gov.uk"
 
 service:
   active-prisons:
