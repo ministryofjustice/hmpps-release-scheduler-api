@@ -16,6 +16,8 @@ integration:
     url: "http://localhost:9005"
   prisoner-search:
     url: "http://localhost:9000"
+  calculate-release-dates:
+    url: "https://localhost:8070"
 
 spring:
   jpa:

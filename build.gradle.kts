@@ -1,3 +1,4 @@
+import jdk.jfr.internal.JVM.exclude
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -6,6 +7,8 @@ plugins {
   kotlin("plugin.jpa") version "2.4.21"
 }
 
+val ehcacheVersion = "3.12.0"
+val hibernateJcacheVersion = "7.4.14.Final"
 val hmppsKotlinVersion = "3.0.3"
 val sentryVersion = "8.62.0"
 val springDocVersion = "3.2.0"
@@ -24,7 +27,9 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springframework.data:spring-data-envers")
   implementation("io.sentry:sentry-spring-boot-4:$sentryVersion")
+  implementation("org.hibernate.orm:hibernate-jcache:$hibernateJcacheVersion")
 
+  runtimeOnly("org.ehcache:ehcache:$ehcacheVersion")
   runtimeOnly("org.springframework.boot:spring-boot-starter-flyway")
   runtimeOnly("org.flywaydb:flyway-database-postgresql")
   runtimeOnly("org.postgresql:postgresql")
