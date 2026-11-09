@@ -1,15 +1,16 @@
 erDiagram
     RELEASE {
         uuid id PK "Primary Key"
-        varchar(7) person_identifier "Identifier of the person"
-        varchar(6) prison_code "Identifier of the prison"
+        version int "Version control"
+        varchar(10) person_identifier "Identifier of the person"
         varchar(32) status_code FK "References STATUS.code"
         varchar(32) reason_code FK "References REASON.code"
+        date confirmed_release_date "User entered scheduled release date"
         date auto_release_date "Latest auto release date"
         date approved_release_date "Latest approved release date"
-        date confirmed_release_date "User entered scheduled release date"
         text comments "Additional notes/comments"
-        calculated_dates jsonb "Optional storage of dates used for the group dates for auto/approved"
+        grouped_dates jsonb "Optional storage of dates used for the group dates for auto/approved"
+        anchor_date_time timestamp "Can be used to identify the appropriate period of custody"
         legacy_id bigint "Reference to the legacy record in nomis"
     }
 

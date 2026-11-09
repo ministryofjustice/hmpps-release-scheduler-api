@@ -24,6 +24,7 @@ spring:
     show-sql: true
     properties:
       hibernate.generate_statistics: true
+      session.events.log: true
   datasource:
     hikari:
       data-source-properties:
@@ -58,3 +59,9 @@ springdoc:
 
 service:
   api-base-url: "http://local-api"
+
+logging:
+  level:
+    org.hibernate.stat: DEBUG
+    org.hibernate.engine.internal.StatisticalLoggingSessionEventListener: INFO
+    org.hibernate.cache: DEBUG

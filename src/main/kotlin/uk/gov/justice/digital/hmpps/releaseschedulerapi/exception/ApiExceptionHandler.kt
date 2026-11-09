@@ -79,7 +79,7 @@ class ApiExceptionHandler {
   fun handleValidationException(e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> = e.allErrors.mapErrors()
 
   @ExceptionHandler(AccessDeniedException::class)
-  fun handleAccessDeniedException(e: AccessDeniedException): ResponseEntity<ErrorResponse> = ResponseEntity
+  fun handleAccessDeniedException(): ResponseEntity<ErrorResponse> = ResponseEntity
     .status(FORBIDDEN)
     .body(ErrorResponse(status = FORBIDDEN))
 

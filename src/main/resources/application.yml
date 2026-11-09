@@ -36,8 +36,7 @@ spring:
         cache:
           use_second_level_cache: true
           use_query_cache: true
-          region:
-            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+          region.factory_class: jcache
           provider_class: org.hibernate.cache.EhCacheProvider
         jdbc:
           lob.non_contextual_creation: true
