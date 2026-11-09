@@ -19,10 +19,9 @@ class ReleaseStatus(
   active: Boolean,
 ) : ReferenceData(code, description, sequenceNumber, active) {
   enum class Code {
-    SCHEDULED,
+    PENDING,
+    UNVERIFIED,
     VERIFIED,
-    CANCELLED,
-    EXPIRED,
     COMPLETED,
   }
 }

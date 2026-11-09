@@ -13,7 +13,6 @@ object DataGenerator {
   fun word(length: Int): String = (1..length).joinToString("") { if (it == 1) letters.random().uppercase() else letters.random().lowercase() }
 
   fun username(): String = (0..12).joinToString("") { letters.random().toString() }
-  fun cellLocation(): String = "${letters.random()}-${(1..9).random()}-${(111..999).random()}"
   fun prisonCode(attempts: Int = 10): String {
     if (attempts <= 0) throw IllegalStateException("Ran out of attempts to find a unique prison code")
     val prisonCode = (1..3).map { letters.random() }.joinToString("")

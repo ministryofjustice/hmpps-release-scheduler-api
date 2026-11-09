@@ -45,10 +45,8 @@ class ReferenceDataIntegrationTest : IntegrationTestBase() {
 
     assertThat(rd.items).containsExactly(
       CodedDescription("PENDING", "Awaiting details"),
-      CodedDescription("SCHEDULED", "Scheduled"),
+      CodedDescription("UNVERIFIED", "Unverified"),
       CodedDescription("VERIFIED", "Verified"),
-      CodedDescription("CANCELLED", "Cancelled"),
-      CodedDescription("EXPIRED", "Expired"),
       CodedDescription("COMPLETED", "Completed"),
     )
   }
