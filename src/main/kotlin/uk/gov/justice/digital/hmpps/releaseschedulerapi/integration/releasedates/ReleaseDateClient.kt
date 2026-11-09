@@ -8,11 +8,11 @@ import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.retryOnTrans
 
 @Service
 class ReleaseDateClient(@Qualifier("crdWebClient") private val webClient: WebClient) {
-  fun getReleaseDates(personIdentifier: String): ReleaseDates = webClient
+  fun getReleaseDates(personIdentifier: String): CalculatedReleaseDates = webClient
     .get()
     .uri(GET_PERSON_RELEASE_DATES, personIdentifier)
     .retrieve()
-    .bodyToMono<ReleaseDates>()
+    .bodyToMono<CalculatedReleaseDates>()
     .retryOnTransientException()
     .block()!!
 

@@ -14,6 +14,9 @@ import java.util.UUID
     JsonSubTypes.Type(value = PrisonerMerged::class, name = PrisonerMerged.EVENT_TYPE),
     JsonSubTypes.Type(value = PrisonerUpdated::class, name = PrisonerUpdated.EVENT_TYPE),
     JsonSubTypes.Type(value = PrisonerReceived::class, name = PrisonerReceived.EVENT_TYPE),
+
+    JsonSubTypes.Type(value = RefreshActiveReleases::class, name = RefreshActiveReleases.EVENT_TYPE),
+    JsonSubTypes.Type(value = RefreshPrisonReleases::class, name = RefreshPrisonReleases.EVENT_TYPE),
   ],
 )
 sealed interface DomainEvent<T : AdditionalInformation> {
@@ -23,7 +26,7 @@ sealed interface DomainEvent<T : AdditionalInformation> {
   val eventType: String
   val description: String
   val additionalInformation: T
-  val personReference: PersonReference
+  val personReference: PersonReference?
   val detailUrl: String?
   val version: Int get() = 1
 
@@ -32,7 +35,7 @@ sealed interface DomainEvent<T : AdditionalInformation> {
     get() = newUuid()
 
   @JsonIgnore
-  fun getPersonIdentifier(): String = checkNotNull(personReference.findPersonIdentifier())
+  fun getPersonIdentifier(): String = checkNotNull(personReference?.findPersonIdentifier())
 }
 
 data class PersonReference(val identifiers: List<Identifier> = listOf()) {

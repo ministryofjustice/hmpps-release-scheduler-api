@@ -11,18 +11,13 @@ import jakarta.persistence.criteria.Predicate
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import org.springframework.data.jpa.repository.JpaRepository
-import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.PersonSummary.Companion.FIRST_NAME
-import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.PersonSummary.Companion.IDENTIFIER
-import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.PersonSummary.Companion.LAST_NAME
-import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.PersonSummary.Companion.PRISON_CODE
 
 @Entity
 @Table(name = "person_summary")
 final class PersonSummary(
   firstName: String,
   lastName: String,
-  prisonCode: String?,
-  cellLocation: String?,
+  prisonCode: String,
   @Id
   @Size(max = 10)
   @Column(name = "person_identifier", nullable = false, length = 10)
@@ -47,29 +42,16 @@ final class PersonSummary(
     private set
 
   @Size(max = 6)
-  @Column(name = "prison_code", length = 6)
-  var prisonCode: String? = prisonCode
+  @Column(name = "prison_code", nullable = false, length = 6)
+  var prisonCode: String = prisonCode
     private set
 
-  @Size(max = 64)
-  @Column(name = "cell_location", length = 64)
-  var cellLocation: String? = cellLocation
-    private set
-
-  fun update(firstName: String, lastName: String, prisonCode: String?, cellLocation: String?) = apply {
-    if (this.firstName != firstName || this.lastName != lastName || this.prisonCode != prisonCode || this.cellLocation != cellLocation) {
+  fun update(firstName: String, lastName: String, prisonCode: String) = apply {
+    if (this.firstName != firstName || this.lastName != lastName || this.prisonCode != prisonCode) {
       this.firstName = firstName
       this.lastName = lastName
       this.prisonCode = prisonCode
-      this.cellLocation = cellLocation
     }
-  }
-
-  companion object {
-    val IDENTIFIER: String = PersonSummary::identifier.name
-    val FIRST_NAME: String = PersonSummary::firstName.name
-    val LAST_NAME: String = PersonSummary::lastName.name
-    val PRISON_CODE: String = PersonSummary::prisonCode.name
   }
 }
 
@@ -80,8 +62,8 @@ fun <T> Join<T, PersonSummary>.matchesName(cb: CriteriaBuilder, name: String): P
     .filter { it.isNotBlank() }
     .map {
       cb.or(
-        cb.like(cb.lower(this[LAST_NAME]), "%${it.lowercase()}%", '\\'),
-        cb.like(cb.lower(this[FIRST_NAME]), "%${it.lowercase()}%", '\\'),
+        cb.like(cb.lower(this[PersonSummary::lastName.name]), "%${it.lowercase()}%", '\\'),
+        cb.like(cb.lower(this[PersonSummary::firstName.name]), "%${it.lowercase()}%", '\\'),
       )
     }.toTypedArray()
   return cb.and(*matches)
@@ -90,9 +72,9 @@ fun <T> Join<T, PersonSummary>.matchesName(cb: CriteriaBuilder, name: String): P
 fun <T> Join<T, PersonSummary>.matchesIdentifier(
   cb: CriteriaBuilder,
   identifier: String,
-): Predicate = cb.equal(get<String>(IDENTIFIER), identifier.uppercase())
+): Predicate = cb.equal(get<String>(PersonSummary::identifier.name), identifier.uppercase())
 
 fun <T> Join<T, PersonSummary>.matchesPrisonCode(
   cb: CriteriaBuilder,
   prisonCode: String,
-): Predicate = cb.equal(get<String>(PRISON_CODE), prisonCode)
+): Predicate = cb.equal(get<String>(PersonSummary::prisonCode.name), prisonCode)

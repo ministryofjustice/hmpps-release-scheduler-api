@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.springframework.data.repository.findByIdOrNull
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.PersonSummary
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.PersonSummaryRepository
-import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.DataGenerator.cellLocation
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.DataGenerator.personIdentifier
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.DataGenerator.prisonCode
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.DataGenerator.word
@@ -19,9 +18,8 @@ interface PersonSummaryOperations {
       personIdentifier: String = personIdentifier(),
       firstName: String = word(8),
       lastName: String = word(8),
-      prisonCode: String? = prisonCode(),
-      cellLocation: String? = cellLocation(),
-    ): PersonSummary = PersonSummary(firstName, lastName, prisonCode, cellLocation, personIdentifier)
+      prisonCode: String = prisonCode(),
+    ): PersonSummary = PersonSummary(firstName, lastName, prisonCode, personIdentifier)
 
     fun PersonSummary.verifyAgainst(prisoner: Prisoner) {
       assertThat(identifier).isEqualTo(prisoner.prisonerNumber)
@@ -32,7 +30,6 @@ interface PersonSummaryOperations {
       } else {
         assertThat(prisonCode).isEqualTo(prisoner.prisonId)
       }
-      assertThat(cellLocation).isEqualTo(prisoner.cellLocation)
     }
   }
 }

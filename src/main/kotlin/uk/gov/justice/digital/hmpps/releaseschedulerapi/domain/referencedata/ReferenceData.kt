@@ -39,6 +39,8 @@ class ReferenceDataRepository(
 
   fun findAllByType(clazz: KClass<out ReferenceData>): List<ReferenceData> = entityManager.createQuery("from ${clazz.qualifiedName}", clazz.java).cacheable().resultList
 
+  fun rdProvider(): RdProvider = RdProvider(findAll())
+
   @PostConstruct
   fun init() {
     findAll()

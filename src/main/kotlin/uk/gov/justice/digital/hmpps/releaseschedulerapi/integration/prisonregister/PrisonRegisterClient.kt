@@ -25,6 +25,15 @@ class PrisonRegisterClient(
   }
 
   fun prisonProvider(ids: Set<String>): PrisonProvider = PrisonProvider(findPrisons(ids).block()!!)
+
+  fun findAllPrisons(active: Boolean? = true): List<Prison> = webClient.get().uri { ub ->
+    ub.path("/prisons/names")
+    active?.let { ub.queryParam("active", it) }
+    ub.build()
+  }.retrieve()
+    .bodyToMono<List<Prison>>()
+    .retryOnTransientException()
+    .block()!!
 }
 
 data class PrisonsByIdsRequest(val prisonIds: Set<String>)

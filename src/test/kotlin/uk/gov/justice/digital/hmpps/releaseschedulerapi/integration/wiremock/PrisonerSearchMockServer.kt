@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import tools.jackson.module.kotlin.jsonMapper
-import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.DataGenerator.cellLocation
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.DataGenerator.personIdentifier
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.DataGenerator.word
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.integration.prisonersearch.Prisoner
@@ -46,7 +45,6 @@ class PrisonerSearchServer : WireMockServer(mockServerConfig(9000)) {
       firstName: String = word(8),
       lastName: String = word(12),
       status: String = "ACTIVE IN",
-      cellLocation: String = cellLocation(),
     ): Prisoner = Prisoner(
       personIdentifier,
       firstName,
@@ -54,7 +52,12 @@ class PrisonerSearchServer : WireMockServer(mockServerConfig(9000)) {
       status,
       prisonCode,
       prisonCode,
-      cellLocation,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
     )
   }
 }
