@@ -4,7 +4,9 @@ import jakarta.persistence.criteria.JoinType
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
+import org.springframework.data.repository.findByIdOrNull
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.referencedata.ReleaseStatus
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.exception.NotFoundException
 import java.time.LocalDate
 import java.util.UUID
 
@@ -16,6 +18,8 @@ interface ReleaseRepository :
     statusCode: List<String> = ReleaseStatus.Code.entries.filter { it != ReleaseStatus.Code.COMPLETED }.map { it.name },
   ): Release?
 }
+
+fun ReleaseRepository.getRelease(id: UUID) = findByIdOrNull(id) ?: throw NotFoundException("Release not found")
 
 fun statusCodeIn(codes: Set<ReleaseStatus.Code>) = Specification<Release> { rel, _, _ ->
   rel.get<Any>(Release::status.name).get<String>(ReleaseStatus::code.name).`in`(codes.map { it.name })
