@@ -21,8 +21,8 @@ data class ReleaseSearchRequest(
   override val start: LocalDate? = null,
   override val end: LocalDate? = null,
   @field:Schema(requiredMode = NOT_REQUIRED)
-  val statusCodes: Set<ReleaseStatus.Code>,
-  val query: String?,
+  val statusCodes: Set<ReleaseStatus.Code> = setOf(),
+  val query: String? = null,
   override val page: Int = 1,
   override val size: Int = 10,
 ) : PagedRequest,
