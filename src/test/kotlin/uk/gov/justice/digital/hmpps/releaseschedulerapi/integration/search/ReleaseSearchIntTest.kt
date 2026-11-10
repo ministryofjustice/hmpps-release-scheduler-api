@@ -134,7 +134,7 @@ class ReleaseSearchIntTest(
   }
 
   @Test
-  fun `can filter transfers by person identifier`() {
+  fun `can filter releases by person identifier`() {
     val prisonCode = prisonCode()
     val toFind = givenRelease(release(prisonCode = prisonCode))
     givenRelease(release(prisonCode = prisonCode))
@@ -150,7 +150,7 @@ class ReleaseSearchIntTest(
   }
 
   @Test
-  fun `can filter transfers by person name`() {
+  fun `can filter releases by person name`() {
     val prisonCode = prisonCode()
     val toFind = givenRelease(release(prisonCode = prisonCode))
     givenRelease(release(prisonCode = prisonCode))

@@ -17,6 +17,12 @@ import java.util.UUID
 
     JsonSubTypes.Type(value = RefreshActiveReleases::class, name = RefreshActiveReleases.EVENT_TYPE),
     JsonSubTypes.Type(value = RefreshPrisonReleases::class, name = RefreshPrisonReleases.EVENT_TYPE),
+
+    JsonSubTypes.Type(value = ReleaseScheduled::class, name = ReleaseScheduled.EVENT_TYPE),
+    JsonSubTypes.Type(value = ReleaseVerified::class, name = ReleaseVerified.EVENT_TYPE),
+    JsonSubTypes.Type(value = ReleaseUnscheduled::class, name = ReleaseUnscheduled.EVENT_TYPE),
+    JsonSubTypes.Type(value = ReleaseUnverified::class, name = ReleaseUnverified.EVENT_TYPE),
+    JsonSubTypes.Type(value = ReleaseMigrated::class, name = ReleaseMigrated.EVENT_TYPE),
   ],
 )
 sealed interface DomainEvent<T : AdditionalInformation> {

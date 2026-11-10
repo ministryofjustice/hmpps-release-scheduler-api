@@ -27,6 +27,7 @@ class DomainEventListener(
 
         is RefreshActiveReleases -> refresh.active()
         is RefreshPrisonReleases -> refresh.prison(event)
+        else -> { /* no-op */ }
       }
     } catch (ex: Exception) {
       Sentry.captureException(ex)
