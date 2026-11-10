@@ -68,7 +68,7 @@ class ReleaseOperationsImpl(
       personIdentifier: String = personIdentifier(),
       prisonCode: String = prisonCode(),
       statusCode: ReleaseStatus.Code = ReleaseStatus.Code.PENDING,
-      reasonCode: String = "CR",
+      reasonCode: String? = null,
       confirmedReleaseDate: LocalDate? = null,
       comments: String? = null,
       groupedDates: GroupedReleaseDates? = null,
@@ -78,7 +78,7 @@ class ReleaseOperationsImpl(
       Release(
         per(personIdentifier, prisonCode),
         rd.get(statusCode.name),
-        rd.get(reasonCode),
+        reasonCode?.let { rd.get(it) },
         confirmedReleaseDate,
         comments,
         groupedDates,
