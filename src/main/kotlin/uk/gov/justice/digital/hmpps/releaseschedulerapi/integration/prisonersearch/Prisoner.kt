@@ -16,7 +16,7 @@ data class Prisoner(
   val prisonerNumber: String,
   val firstName: String,
   val lastName: String,
-  val status: String,
+  val status: String?,
   val prisonId: String?,
   val lastPrisonId: String?,
   // temporary dates for testing using prisoner search
@@ -28,7 +28,7 @@ data class Prisoner(
   val actualParoleDate: LocalDate?,
 ) {
   @JsonIgnore
-  fun responsiblePrison(): String = (if (status.startsWith(ACTIVE)) lastPrisonId else prisonId) ?: OUT
+  fun responsiblePrison(): String = (if (status?.startsWith(ACTIVE) == true) lastPrisonId else prisonId) ?: OUT
 
   companion object {
     private const val ACTIVE = "ACTIVE"
