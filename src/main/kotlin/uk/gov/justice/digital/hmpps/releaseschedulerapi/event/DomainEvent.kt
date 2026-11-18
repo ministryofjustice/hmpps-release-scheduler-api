@@ -14,6 +14,7 @@ import java.util.UUID
     JsonSubTypes.Type(value = PrisonerMerged::class, name = PrisonerMerged.EVENT_TYPE),
     JsonSubTypes.Type(value = PrisonerUpdated::class, name = PrisonerUpdated.EVENT_TYPE),
     JsonSubTypes.Type(value = PrisonerReceived::class, name = PrisonerReceived.EVENT_TYPE),
+    JsonSubTypes.Type(value = BookingMoved::class, name = BookingMoved.EVENT_TYPE),
 
     JsonSubTypes.Type(value = RefreshActiveReleases::class, name = RefreshActiveReleases.EVENT_TYPE),
     JsonSubTypes.Type(value = RefreshPrisonReleases::class, name = RefreshPrisonReleases.EVENT_TYPE),
