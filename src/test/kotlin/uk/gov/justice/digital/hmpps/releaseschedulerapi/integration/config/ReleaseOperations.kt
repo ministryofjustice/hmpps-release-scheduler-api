@@ -73,7 +73,8 @@ class ReleaseOperationsImpl(
       comments: String? = null,
       groupedDates: GroupedReleaseDates? = null,
       anchorDateTime: LocalDateTime = LocalDateTime.now(),
-      legacyId: Long? = null,
+      legacyBookingId: Long? = null,
+      legacySequenceNumber: Int? = null,
     ): ReleaseProvider = { per, rd ->
       Release(
         per(personIdentifier, prisonCode),
@@ -83,7 +84,8 @@ class ReleaseOperationsImpl(
         comments,
         groupedDates,
         anchorDateTime,
-        legacyId,
+        legacyBookingId,
+        legacySequenceNumber,
       )
     }
   }

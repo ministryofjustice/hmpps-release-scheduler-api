@@ -31,6 +31,7 @@ class PrisonerReceivedHandler(
           prisoner.groupedDates(),
           LocalDateTime.now(),
           null,
+          null,
         ),
       )
     }

@@ -34,6 +34,7 @@ class PersonUpdatedHandler(
                 prisoner.groupedDates(),
                 LocalDateTime.now(),
                 null,
+                null,
               ),
             )
         }

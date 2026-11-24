@@ -10,23 +10,24 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.access.Roles
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.config.OpenApiTags
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.sync.internal.ResyncReleases
 import java.util.UUID
 
 @Tag(name = OpenApiTags.SYNC)
 @RestController
 @RequestMapping("resync/releases")
 @PreAuthorize("hasRole('${Roles.LEGACY_SYNC}')")
-class ResyncController {
+class ResyncController(private val resync: ResyncReleases) {
   @PutMapping("/{personIdentifier}")
   fun resync(
     @PathVariable personIdentifier: String,
     @Valid @RequestBody request: ResyncReleasesRequest,
-  ): ResyncResponse = TODO()
+  ): ResyncResponse = resync.all(personIdentifier, request)
 }
 
 data class ResyncReleasesRequest(val releases: List<ResyncRelease>) {
   fun releaseIds(): Pair<Set<Long>, Set<UUID>> {
-    val (legacyIds, ids) = releases.map { requireNotNull(it.release.legacyId) to it.release.dpsId }.unzip()
+    val (legacyIds, ids) = releases.map { requireNotNull(it.release.legacyBookingId) to it.release.dpsId }.unzip()
     return legacyIds.toSet() to ids.filterNotNull().toSet()
   }
 }

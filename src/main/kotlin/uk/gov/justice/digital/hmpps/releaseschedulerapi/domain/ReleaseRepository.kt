@@ -17,6 +17,8 @@ interface ReleaseRepository :
     personIdentifier: String,
     statusCode: List<String> = ReleaseStatus.Code.entries.filter { it != ReleaseStatus.Code.COMPLETED }.map { it.name },
   ): Release?
+
+  fun findAllByPersonIdentifier(personIdentifier: String): List<Release>
 }
 
 fun ReleaseRepository.getRelease(id: UUID) = findByIdOrNull(id) ?: throw NotFoundException("Release not found")

@@ -43,7 +43,8 @@ final class Release(
   comments: String?,
   groupedDates: GroupedReleaseDates?,
   anchorDate: LocalDateTime,
-  legacyId: Long?,
+  legacyBookingId: Long?,
+  legacySequenceNumber: Int?,
   id: UUID = newUuid(),
 ) : Identifiable,
   DomainEventProducer {
@@ -100,8 +101,12 @@ final class Release(
   var anchorDate: LocalDateTime = anchorDate
     private set
 
-  @Column(name = "legacy_id")
-  var legacyId: Long? = legacyId
+  @Column(name = "legacy_booking_id")
+  var legacyBookingId: Long? = legacyBookingId
+    private set
+
+  @Column(name = "legacy_sequence_number")
+  var legacySequenceNumber: Int? = legacySequenceNumber
     private set
 
   @Transient
