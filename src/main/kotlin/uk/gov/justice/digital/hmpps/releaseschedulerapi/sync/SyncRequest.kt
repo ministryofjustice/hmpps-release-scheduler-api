@@ -2,14 +2,9 @@ package uk.gov.justice.digital.hmpps.releaseschedulerapi.sync
 
 import java.time.LocalDateTime
 
-interface SyncRequest
-
-interface NumericLegacyIdRequest : SyncRequest {
-  val legacyId: Long?
-}
-
-interface StringLegacyIdRequest : SyncRequest {
-  val legacyId: String?
+interface SyncRequest {
+  val legacyBookingId: Long?
+  val legacySequenceNumber: Int?
 }
 
 data class SyncUser(val username: String, val activeCaseloadId: String?)

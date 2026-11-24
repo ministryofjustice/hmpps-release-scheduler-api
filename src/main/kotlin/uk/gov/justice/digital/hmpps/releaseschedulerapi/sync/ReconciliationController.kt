@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.access.Roles
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.config.OpenApiTags
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.sync.internal.RetrieveForSync
 
 @Tag(name = OpenApiTags.SYNC)
 @RestController
 @RequestMapping("reconciliation/releases")
 @PreAuthorize("hasRole('${Roles.LEGACY_SYNC}')")
-class ReconciliationController {
+class ReconciliationController(private val retrieve: RetrieveForSync) {
   @GetMapping("/{personIdentifier}")
-  fun reconcile(@PathVariable personIdentifier: String): ReconciliationResponse = TODO()
+  fun reconcile(@PathVariable personIdentifier: String): ReconciliationResponse = retrieve.all(personIdentifier)
 }
 
 data class ReconciliationResponse(val releases: List<ReconciliationRelease>)

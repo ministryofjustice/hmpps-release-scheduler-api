@@ -6,7 +6,8 @@ import java.util.UUID
 
 @Schema(name = "SyncRelease")
 data class ScheduledRelease(
-  override val legacyId: Long?,
+  override val legacyBookingId: Long?,
+  override val legacySequenceNumber: Int?,
   val dpsId: UUID?,
   val releaseDate: LocalDate?,
   val reasonCode: String?,
@@ -17,4 +18,9 @@ data class ScheduledRelease(
   val autoReleaseDate: LocalDate?,
   val dtoApprovedDate: LocalDate?,
   val dtoMidTermDate: LocalDate?,
-) : NumericLegacyIdRequest
+) : SyncRequest {
+  companion object {
+    const val SCHEDULED = "SCH"
+    const val EXPIRED = "EXP"
+  }
+}
