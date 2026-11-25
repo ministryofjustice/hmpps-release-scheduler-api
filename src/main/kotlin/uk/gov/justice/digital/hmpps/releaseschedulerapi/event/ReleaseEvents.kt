@@ -31,6 +31,28 @@ data class ReleaseMigrated(
   }
 }
 
+data class ReleaseAwaitingDetails(
+  override val additionalInformation: ReleaseInformation,
+  override val personReference: PersonReference,
+) : DomainEvent<ReleaseInformation> {
+  override val eventType: String = EVENT_TYPE
+  override val description: String = DESCRIPTION
+  override val detailUrl: String = releaseUrl(additionalInformation.id)
+
+  companion object {
+    const val EVENT_TYPE: String = "person.release.pending"
+    const val DESCRIPTION: String = "A release is awaiting details"
+    operator fun invoke(
+      personIdentifier: String,
+      id: UUID,
+      dataSource: DataSource = SchedulerContext.get().source,
+    ) = ReleaseAwaitingDetails(
+      ReleaseInformation(id, dataSource),
+      PersonReference.withIdentifier(personIdentifier),
+    )
+  }
+}
+
 data class ReleaseScheduled(
   override val additionalInformation: ReleaseInformation,
   override val personReference: PersonReference,
@@ -113,6 +135,28 @@ data class ReleaseUnverified(
       id: UUID,
       dataSource: DataSource = SchedulerContext.get().source,
     ) = ReleaseUnverified(
+      ReleaseInformation(id, dataSource),
+      PersonReference.withIdentifier(personIdentifier),
+    )
+  }
+}
+
+data class ReleaseCompleted(
+  override val additionalInformation: ReleaseInformation,
+  override val personReference: PersonReference,
+) : DomainEvent<ReleaseInformation> {
+  override val eventType: String = EVENT_TYPE
+  override val description: String = DESCRIPTION
+  override val detailUrl: String = releaseUrl(additionalInformation.id)
+
+  companion object {
+    const val EVENT_TYPE: String = "person.release.completed"
+    const val DESCRIPTION: String = "A release has been completed"
+    operator fun invoke(
+      personIdentifier: String,
+      id: UUID,
+      dataSource: DataSource = SchedulerContext.get().source,
+    ) = ReleaseCompleted(
       ReleaseInformation(id, dataSource),
       PersonReference.withIdentifier(personIdentifier),
     )

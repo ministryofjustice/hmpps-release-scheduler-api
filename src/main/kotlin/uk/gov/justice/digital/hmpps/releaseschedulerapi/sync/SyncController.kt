@@ -16,15 +16,15 @@ import java.util.UUID
 
 @Tag(name = OpenApiTags.SYNC)
 @RestController
-@RequestMapping("sync")
+@RequestMapping("sync/releases")
 @PreAuthorize("hasRole('${Roles.LEGACY_SYNC}')")
 class SyncController(private val sync: ReleaseSync, private val retrieve: RetrieveForSync) {
-  @PutMapping("/releases/{personIdentifier}")
+  @PutMapping("/{personIdentifier}")
   fun syncRelease(
     @PathVariable personIdentifier: String,
     @RequestBody request: SyncReleaseRequest,
   ): ReferenceId = sync.release(personIdentifier, request)
 
-  @GetMapping("/releases/{id}")
-  fun getRelease(@PathVariable id: UUID): ScheduledRelease = retrieve.release(id)
+  @GetMapping("/{id}")
+  fun getRelease(@PathVariable id: UUID): SyncRelease = retrieve.release(id)
 }

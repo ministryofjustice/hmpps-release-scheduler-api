@@ -22,7 +22,14 @@ import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.referencedata.RdP
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.referencedata.ReleaseReason
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.referencedata.ReleaseStatus
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.domain.releasedate.GroupedReleaseDates
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.event.DomainEvent
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.event.ReleaseAwaitingDetails
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.event.ReleaseCompleted
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.event.ReleaseInformation
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.event.ReleaseMigrated
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.event.ReleaseUnverified
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.event.ReleaseVerified
+import uk.gov.justice.digital.hmpps.releaseschedulerapi.model.action.CompleteRelease
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.model.action.ReleaseAction
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.model.action.ScheduleAction
 import uk.gov.justice.digital.hmpps.releaseschedulerapi.model.action.UnscheduleRelease
@@ -30,7 +37,6 @@ import uk.gov.justice.digital.hmpps.releaseschedulerapi.model.action.VerifyRelea
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import kotlin.code
 
 @Audited
 @Entity
@@ -116,7 +122,7 @@ final class Release(
   @PreUpdate
   fun validateState() {
     if (confirmedReleaseDate == null) {
-      check(status.code == ReleaseStatus.Code.PENDING.name)
+      check(status.code in listOf(ReleaseStatus.Code.PENDING.name, ReleaseStatus.Code.COMPLETED.name))
     }
     if (confirmedReleaseDate?.isBefore(LocalDate.now()) == true) {
       check(status.code == ReleaseStatus.Code.COMPLETED.name)
@@ -131,20 +137,30 @@ final class Release(
   override fun initialEvents(): Set<DomainEventPublication> = if (SchedulerContext.get().migratingData) {
     setOf(ReleaseMigrated(person.identifier, id).publication(id))
   } else {
-    setOf()
+    val event: DomainEvent<ReleaseInformation> = when (ReleaseStatus.Code.valueOf(status.code)) {
+      ReleaseStatus.Code.VERIFIED -> ReleaseVerified(person.identifier, id)
+      ReleaseStatus.Code.UNVERIFIED -> ReleaseUnverified(person.identifier, id)
+      ReleaseStatus.Code.PENDING -> ReleaseAwaitingDetails(person.identifier, id)
+      ReleaseStatus.Code.COMPLETED -> ReleaseCompleted(person.identifier, id)
+    }
+    setOf(event.publication(id))
   }
 
   override fun domainEvents(): Set<DomainEventPublication> = appliedActions.mapNotNull {
     it.domainEvent(this)?.publication(id)
   }.toSet()
 
-  fun apply(action: ScheduleAction, rdProvider: RdProvider) = apply {
+  fun apply(action: ScheduleAction, rdProvider: RdProvider, statusOverride: Boolean = false) = apply {
     if (action changes this) {
       confirmedReleaseDate = action.confirmedReleaseDate
       reason = rdProvider.get(action.reasonCode)
       comments = if (action changes comments) action.comments else comments
-      status = rdProvider.get(ReleaseStatus.Code.UNVERIFIED.name)
       appliedActions += action as ReleaseAction
+      status = rdProvider.get(ReleaseStatus.Code.UNVERIFIED.name)
+    }
+    if (statusOverride) {
+      appliedActions += action as ReleaseAction
+      status = rdProvider.get(ReleaseStatus.Code.UNVERIFIED.name)
     }
   }
 
@@ -165,8 +181,11 @@ final class Release(
     }
   }
 
-  fun complete(rdProvider: RdProvider) = apply {
-    status = rdProvider.get(ReleaseStatus.Code.COMPLETED.name)
+  fun apply(action: CompleteRelease, rdProvider: RdProvider) = apply {
+    if (action changes this) {
+      status = rdProvider.get(ReleaseStatus.Code.COMPLETED.name)
+      appliedActions += action
+    }
   }
 
   // for testing in dev until crd endpoints are available
@@ -181,6 +200,14 @@ final class Release(
       approvedReleaseDate = approved
       status = if (currentlyScheduled()) rdProvider.get(ReleaseStatus.Code.UNVERIFIED.name) else status
     }
+  }
+
+  fun overrideAutoReleaseDate(date: LocalDate?) = apply {
+    autoReleaseDate = date
+  }
+
+  fun overrideApprovedReleaseDate(date: LocalDate?) = apply {
+    approvedReleaseDate = date
   }
 
   private fun currentlyScheduled(): Boolean = confirmedReleaseDate?.isAfter(LocalDate.now()) == true
