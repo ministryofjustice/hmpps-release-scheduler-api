@@ -12,5 +12,5 @@ data class SyncUser(val username: String, val activeCaseloadId: String?)
 data class SyncReleaseRequest(
   val occurredAt: LocalDateTime,
   val syncUser: SyncUser,
-  val release: ScheduledRelease,
+  val release: SyncRelease,
 )

@@ -19,6 +19,8 @@ interface ReleaseRepository :
   ): Release?
 
   fun findAllByPersonIdentifier(personIdentifier: String): List<Release>
+
+  fun findByLegacyBookingIdAndLegacySequenceNumber(legacyBookingId: Long, legacySequenceNumber: Int?): Release?
 }
 
 fun ReleaseRepository.getRelease(id: UUID) = findByIdOrNull(id) ?: throw NotFoundException("Release not found")

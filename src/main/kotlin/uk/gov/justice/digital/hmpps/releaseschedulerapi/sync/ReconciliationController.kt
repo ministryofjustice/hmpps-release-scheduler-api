@@ -20,4 +20,4 @@ class ReconciliationController(private val retrieve: RetrieveForSync) {
 }
 
 data class ReconciliationResponse(val releases: List<ReconciliationRelease>)
-data class ReconciliationRelease(val release: ScheduledRelease)
+data class ReconciliationRelease(val release: SyncRelease)

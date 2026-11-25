@@ -32,7 +32,7 @@ data class ResyncReleasesRequest(val releases: List<ResyncRelease>) {
   }
 }
 
-data class ResyncRelease(val release: ScheduledRelease, val created: AtAndBy, val modified: AtAndBy?)
+data class ResyncRelease(val release: SyncRelease, val created: AtAndBy, val modified: AtAndBy?)
 
 data class ResyncResponse(val releases: List<ReleaseMapping>)
 data class ReleaseMapping(val dpsId: UUID, val legacyBookingId: Long)
